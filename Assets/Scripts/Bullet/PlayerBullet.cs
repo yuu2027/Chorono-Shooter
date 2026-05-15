@@ -11,7 +11,6 @@ public class PlayerBullet : BulletBase
         if (enemy == null) return;
 
         enemy.TakeDamage(damage);
-
-        Destroy(gameObject);
+        ReturnToPool();
     }
 }

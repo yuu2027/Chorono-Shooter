@@ -10,6 +10,6 @@ public class EnemyBullet : BulletBase
         if (playerHealth == null) return;
 
         playerHealth.TakeDamage(damage);
-        Destroy(gameObject);
+        ReturnToPool();
     }
 }

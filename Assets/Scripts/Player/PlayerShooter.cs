@@ -46,18 +46,12 @@ public class PlayerShooter : MonoBehaviour
             return;
         }
 
-        // Instantiateで弾丸を生成
-        GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        PlayerBullet bullet = bulletObject.GetComponent<PlayerBullet>(); // PlayerBulletコンポーネントを取得
+        // ObjectPoolで弾を生成
+        BulletBase bullet = BulletPool.Instance.Spawn(bulletPrefab, firePoint.position, firePoint.rotation, firePoint.up, bulletSpeed, bulletLifeTime, bulletDamage, ownerColliders);
 
-        if (bullet == null) // 弾丸オブジェクトにPlayerBulletコンポーネントが入っていない時エラー処理
+        if (bullet == null)
         {
-            Debug.LogWarning("PlayerShooter: 生成した弾に PlayerBullet がありません。", bulletObject);
-            Destroy(bulletObject);
-            return;
+            Debug.LogWarning("PlayerShooter: 弾の生成に失敗しました。", this);
         }
-
-        // 生成した弾に初期情報を与える関数
-        bullet.Initialize(firePoint.up, bulletSpeed, bulletLifeTime, bulletDamage, ownerColliders);
     }
 }

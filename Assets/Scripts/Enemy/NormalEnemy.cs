@@ -43,13 +43,6 @@ public class NormalEnemy : EnemyBase
 
         attackTimer = Mathf.Max(0.01f, attackInterval);
 
-        ShootBullet(
-            enemyBulletPrefab,
-            firePoint,
-            attackDirection,
-            bulletSpeed,
-            bulletLifeTime,
-            bulletDamage
-        );
+        ShootBullet(enemyBulletPrefab, firePoint, attackDirection, bulletSpeed, bulletLifeTime, bulletDamage);
     }
 }

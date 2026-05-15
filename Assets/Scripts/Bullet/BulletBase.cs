@@ -1,4 +1,5 @@
-using Unity.Properties;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
@@ -15,6 +16,15 @@ public class BulletBase : MonoBehaviour
     protected float moveSpeed;                    // é¿ç€Ç…Ç±ÇÃíeÇ™à⁄ìÆÇ∑ÇÈÇ∆Ç´Ç…égÇ§ë¨ìx
     protected int damage;                         // ó^Ç¶ÇÈçUåÇóÕ
     protected bool initialized;                   // èâä˙âªîªíËóp
+
+    private BulletPool bulletPool;
+    private BulletBase sourcePrefab;
+    private Coroutine lifeTimeCoroutine;
+    private bool released = true;
+
+    private readonly List<Collider2D> ignoredOwnerColliders = new List<Collider2D>();
+
+    public BulletBase SourcePrefab => sourcePrefab;
 
     public int Damage => damage;
 
@@ -41,17 +51,89 @@ public class BulletBase : MonoBehaviour
         }
     }
 
+    public void SetPool(BulletPool pool, BulletBase prefab)
+    {
+        bulletPool = pool;
+        sourcePrefab = prefab;
+    }
+
     public virtual void Initialize(Vector2 direction, float speed, float lifeTime, int bulletDamage, Collider2D[] ownerColliders)
     {
+        released = false;
+        initialized = true;
+
+        StopLifeTimeCoroutine();
+        RestoreOwnerCollision();
+
         moveDirection = direction.sqrMagnitude > 0.0f ? direction.normalized : Vector2.up;
         moveSpeed = speed > 0.0f ? speed : defaultSpeed;
         damage = bulletDamage > 0 ? bulletDamage : defaultDamage;
-        initialized = true;
 
         IgnoreOwnerCollision(ownerColliders);
         
         float finalLifeTime = lifeTime > 0.0f ? lifeTime : defaultLifeTime;
-        Destroy(gameObject, finalLifeTime);
+        lifeTimeCoroutine = StartCoroutine(LifeTimeRoutine(finalLifeTime));
+    }
+
+    protected void ReturnToPool()
+    {
+        if(released) return;
+
+        released = true;
+        initialized = false;
+
+        StopLifeTimeCoroutine();
+        RestoreOwnerCollision();
+
+        if(rb!= null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0.0f;
+        }
+
+        if (bulletPool != null)
+        {
+            bulletPool.Release(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator LifeTimeRoutine(float lifeTime)
+    {
+        yield return new WaitForSeconds(lifeTime);
+
+        lifeTimeCoroutine = null;
+        ReturnToPool();
+    }
+
+    private void StopLifeTimeCoroutine()
+    {
+        if (lifeTimeCoroutine == null) return;
+        
+        StopCoroutine(lifeTimeCoroutine);
+        lifeTimeCoroutine = null;
+    }
+
+    private void RestoreOwnerCollision()
+    {
+        for (int i = 0; i < ignoredOwnerColliders.Count; i++)
+        {
+            Collider2D owner = ignoredOwnerColliders[i];
+            if (owner == null) continue;
+
+            for(int j = 0;j < myColliders.Length; j++)
+            {
+                Collider2D mine = myColliders[j];
+                if(mine == null) continue;
+
+                Physics2D.IgnoreCollision(mine, owner, false);
+            }
+        }
+
+        ignoredOwnerColliders.Clear();
     }
 
     protected virtual void FixedUpdate()
@@ -68,7 +150,7 @@ public class BulletBase : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        Destroy(gameObject);
+        ReturnToPool();
     }
 
     // íeÇ™î≠éÀÇµÇΩñ{êlÇ…ìñÇΩÇÁÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈèàóù
@@ -87,6 +169,11 @@ public class BulletBase : MonoBehaviour
                 if (mine == null) continue;
 
                 Physics2D.IgnoreCollision(mine, owner, true); // ìñÇΩÇËîªíËÇñ≥å¯âª
+            }
+
+            if (!ignoredOwnerColliders.Contains(owner))
+            {
+                ignoredOwnerColliders.Add(owner);
             }
         }
     }

@@ -17,6 +17,7 @@ public class EnemyBase : MonoBehaviour
     private int currentHp;  // 現在のHP
     private bool isDead;    // 死亡フラグ
 
+
     public int CurrentHp => currentHp;       // 読み取り専用のプロパティ
     public int MaxHp => Mathf.Max(1, maxHp); // 読み取り専用のプロパティ
     public int ScoreValue => scoreValue;     // 読み取り専用のプロパティ
@@ -59,13 +60,11 @@ public class EnemyBase : MonoBehaviour
     // 敵の移動処理
     protected virtual void Move()
     {
-        
     }
 
     // 敵の攻撃処理
     protected virtual void Attack()
-    {
-        
+    {   
     }
 
     protected void MoveInDirection(Vector2 direction, float speed)
@@ -80,14 +79,7 @@ public class EnemyBase : MonoBehaviour
         rb.MovePosition(nextPosition);
     }
 
-    protected GameObject ShootBullet(
-        GameObject bulletPrefab,
-        Transform firePoint,
-        Vector2 direction,
-        float speed,
-        float lifeTime,
-        int damage
-    )
+    protected GameObject ShootBullet(GameObject bulletPrefab, Transform firePoint, Vector2 direction, float speed, float lifeTime, int damage)
     {
         if (bulletPrefab == null) return null;
         if (firePoint == null) return null;
@@ -97,33 +89,10 @@ public class EnemyBase : MonoBehaviour
             : Vector2.down;
 
         float angle = Mathf.Atan2(finalDirection.y, finalDirection.x) * Mathf.Rad2Deg - 90.0f;
-        GameObject bulletObject = Instantiate(
-            bulletPrefab,
-            firePoint.position,
-            Quaternion.Euler(0.0f, 0.0f, angle)
-        );
 
-        BulletBase bullet = bulletObject.GetComponent<BulletBase>();
-        if (bullet != null)
-        {
-            bullet.Initialize(finalDirection, speed, lifeTime, damage, myColliders);
-            return bulletObject;
-        }
+        BulletBase bullet = BulletPool.Instance.Spawn(bulletPrefab, firePoint.position, Quaternion.Euler(0.0f, 0.0f, angle), finalDirection, speed, lifeTime, damage, myColliders);
 
-        Rigidbody2D bulletRb = bulletObject.GetComponent<Rigidbody2D>();
-        if (bulletRb != null)
-        {
-            bulletRb.gravityScale = 0.0f;
-            bulletRb.freezeRotation = true;
-            bulletRb.linearVelocity = finalDirection * speed;
-        }
-
-        if (lifeTime > 0.0f)
-        {
-            Destroy(bulletObject, lifeTime);
-        }
-
-        return bulletObject;
+        return bullet != null ? bullet.gameObject : null;
     }
 
     // ダメージを受けた時の処理
