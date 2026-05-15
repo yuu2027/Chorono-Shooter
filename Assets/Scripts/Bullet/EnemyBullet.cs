@@ -6,21 +6,10 @@ public class EnemyBullet : BulletBase
 {
     protected override void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-        if (player == null) return;
+        PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+        if (playerHealth == null) return;
 
-        // PlayerHealth や PlayerController に TakeDamage(int) を作ったら呼ばれる。
-        // まだ無い場合でもエラーにはならず、弾だけ消える。
-        other.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
-
+        playerHealth.TakeDamage(damage);
         Destroy(gameObject);
-
-        //PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-        //if (playerHealth == null) return;
-
-        //playerHealth.TakeDamage(damage);
-        //Destroy(gameObject);
     }
-
-
 }

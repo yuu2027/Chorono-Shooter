@@ -14,9 +14,8 @@ public class EnemyBase : MonoBehaviour
 
     private Rigidbody2D rb; // Rigidbody2D用の変数
     protected Collider2D[] myColliders;
-    private int currentHp; // 現在のHP
-    private bool isDead;   // 死亡フラグ
-    private float attackTimer; // 次に攻撃できるまでの残り時間
+    private int currentHp;  // 現在のHP
+    private bool isDead;    // 死亡フラグ
 
     public int CurrentHp => currentHp;       // 読み取り専用のプロパティ
     public int MaxHp => Mathf.Max(1, maxHp); // 読み取り専用のプロパティ
