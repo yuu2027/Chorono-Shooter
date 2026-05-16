@@ -24,7 +24,7 @@ public class BulletBase : MonoBehaviour
 
     private readonly List<Collider2D> ignoredOwnerColliders = new List<Collider2D>();
 
-    public BulletBase SourcePrefab => sourcePrefab;
+    public BulletBase SourcePrefab => sourcePrefab; // 他のファイルから値は変更させないが中身だけ見せる
 
     public int Damage => damage;
 
@@ -51,6 +51,7 @@ public class BulletBase : MonoBehaviour
         }
     }
 
+    // どのプレハブのObjectPoolを使うかを保存
     public void SetPool(BulletPool pool, BulletBase prefab)
     {
         bulletPool = pool;
@@ -87,8 +88,8 @@ public class BulletBase : MonoBehaviour
 
         if(rb!= null)
         {
-            rb.linearVelocity = Vector2.zero;
-            rb.angularVelocity = 0.0f;
+            rb.linearVelocity = Vector2.zero; // 速度を0
+            rb.angularVelocity = 0.0f;        // 回転速度を0
         }
 
         if (bulletPool != null)
@@ -101,6 +102,7 @@ public class BulletBase : MonoBehaviour
         }
     }
 
+    // 弾の寿命を管理する関数
     private IEnumerator LifeTimeRoutine(float lifeTime)
     {
         yield return new WaitForSeconds(lifeTime);
@@ -109,6 +111,7 @@ public class BulletBase : MonoBehaviour
         ReturnToPool();
     }
 
+    // LifeTimeRoutineを止めるための関数
     private void StopLifeTimeCoroutine()
     {
         if (lifeTimeCoroutine == null) return;
@@ -117,6 +120,7 @@ public class BulletBase : MonoBehaviour
         lifeTimeCoroutine = null;
     }
 
+    // 一時的に無効化していた発射者との当たり判定を元に戻す処理
     private void RestoreOwnerCollision()
     {
         for (int i = 0; i < ignoredOwnerColliders.Count; i++)
