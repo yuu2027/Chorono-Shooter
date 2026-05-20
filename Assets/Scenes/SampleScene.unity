@@ -497,11 +497,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 23837684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1156041358 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3298378965322456175, guid: 673a46e9fc682f44780f48c46a2e15d5, type: 3}
-  m_PrefabInstance: {fileID: 2866325119656124698}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1482794033
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,16 +578,7 @@ MonoBehaviour:
   targetCamera: {fileID: 519420031}
   enemyParent: {fileID: 2053092218}
   spawnZ: 0
-  spawnRules:
-  - enemyId: NormalEnemy
-    enemyPrefab: {fileID: 1156041358}
-    startTime: 0
-    endTime: 10
-    spawnInterval: 1
-    maxAlive: 4
-    minViewportX: 0
-    maxViewportX: 1
-    spawnViewportY: 0
+  stageSpawnData: {fileID: 11400000, guid: d2341ebf586d05346990aab20842a109, type: 2}
   fallbackSpawnXRange: {x: -7.5, y: 7.5}
   fallbackSpawnY: 5.5
 --- !u!4 &2053092218

@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e01477a090527d4aa6d5bd78808f41c, type: 3}
   m_Name: StageSpawnerData
   m_EditorClassIdentifier: Assembly-CSharp::StageSpawnData
-  rules: []
+  rules:
+  - enemyId: 
+    enemyPrefab: {fileID: 3298378965322456175, guid: 673a46e9fc682f44780f48c46a2e15d5, type: 3}
+    startTime: 0
+    endTime: 100
+    spawnInterval: 0.01
+    maxAlive: 10
+    minViewportX: 0
+    maxViewportX: 1
+    spawnViewportY: 1.1
