@@ -52,11 +52,7 @@ public class PlayerHealth : MonoBehaviour
     // ダメージ量を計算して死亡か確認
     public void TakeDamage(int damage)
     {
-        //Debug.Log(
-        //$"TakeDamage called. damage = {damage}, CurrentHp = {CurrentHp}\n" +
-        //StackTraceUtility.ExtractStackTrace(),
-        //this
-        //);
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState != GameState.Playing) return;
 
         if (isDead) return;
         if(isInvincible) return;
@@ -128,6 +124,11 @@ public class PlayerHealth : MonoBehaviour
 
         onDied.Invoke();
         Died?.Invoke();
+
+        if(GameManager.Instance != null)
+        {
+            GameManager.Instance.GameOver();
+        }
 
         Debug.Log("Game Over", this);
 

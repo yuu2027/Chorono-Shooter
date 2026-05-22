@@ -75,6 +75,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        if (GameManager.Instance != null) return;
+
         if (spawnOnStart)
         {
             StartSpawning(); // スポーン開始
@@ -84,13 +86,19 @@ public class EnemySpawner : MonoBehaviour
     private void Update()
     {
         if (!isSpawning) return;
+        if (!CanSpawn()) return;
 
-        elapsedTime += Time.deltaTime; // 経過時間計算
+        elapsedTime += TimeController.EnemyDeltaTime; // 経過時間計算
 
         for (int i = 0; i < spawnRules.Count; i++) 
         {
             TickRule(spawnRules[i]);
         }
+    }
+
+    private bool CanSpawn()
+    {
+        return GameManager.Instance == null || GameManager.Instance.CurrentState == GameState.Playing;
     }
 
     // 敵の出現処理を開始する
@@ -152,7 +160,7 @@ public class EnemySpawner : MonoBehaviour
 
         if (rule.aliveEnemies.Count >= rule.maxAlive) return;
 
-        rule.timer -= Time.deltaTime;
+        rule.timer -= TimeController.EnemyDeltaTime;
         if (rule.timer > 0.0f) return; // 次の出現タイミングまで待つ
 
         Spawn(rule);

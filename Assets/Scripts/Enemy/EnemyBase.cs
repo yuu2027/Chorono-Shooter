@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
@@ -40,6 +41,8 @@ public class EnemyBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (!CanRunGameLogic()) return;
+
         if (isDead) return;
 
         Attack();
@@ -52,7 +55,9 @@ public class EnemyBase : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if(isDead) return;
+        if (!CanRunGameLogic()) return;
+
+        if (isDead) return;
 
         Move();
     }
@@ -67,15 +72,18 @@ public class EnemyBase : MonoBehaviour
     {   
     }
 
+    private bool CanRunGameLogic()
+    {
+        return GameManager.Instance == null || GameManager.Instance.CurrentState == GameState.Playing;
+    }
+
     protected void MoveInDirection(Vector2 direction, float speed)
     {
         if (speed <= 0.0f) return;
 
-        Vector2 finalDirection = direction.sqrMagnitude > 0.0f
-            ? direction.normalized
-            : Vector2.down;
+        Vector2 finalDirection = direction.sqrMagnitude > 0.0f ? direction.normalized : Vector2.down;
 
-        Vector2 nextPosition = rb.position + finalDirection * speed * Time.fixedDeltaTime;
+        Vector2 nextPosition = rb.position + finalDirection * speed * TimeController.EnemyFixedDeltaTime;
         rb.MovePosition(nextPosition);
     }
 
@@ -98,6 +106,8 @@ public class EnemyBase : MonoBehaviour
     // ダメージを受けた時の処理
     public virtual void TakeDamage(int damage)
     {
+        if (!CanRunGameLogic()) return;
+
         if (isDead) return;      // すでに死んでいるなら実行しない
         if (damage <= 0) return; // ダメージが０以下なら実行しない
 
@@ -115,6 +125,12 @@ public class EnemyBase : MonoBehaviour
         if (isDead) return;
 
         isDead = true; // 死亡フラグを立てる
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.AddScore(scoreValue);
+            GameManager.Instance.AddKillCount();
+        }
 
         // ScoreManagerを作ったら、ここでscoreValueを加算する。
         Destroy(gameObject);

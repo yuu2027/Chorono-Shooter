@@ -4,8 +4,12 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class EnemyBullet : BulletBase
 {
+    protected override float TimeScale => TimeController.EnemyScale;
+
     protected override void OnTriggerEnter2D(Collider2D other)
     {
+        if (!CanRunGameLogic()) return;
+
         PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
         if (playerHealth == null) return;
 

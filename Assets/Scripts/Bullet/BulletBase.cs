@@ -25,6 +25,7 @@ public class BulletBase : MonoBehaviour
     private readonly List<Collider2D> ignoredOwnerColliders = new List<Collider2D>();
 
     public BulletBase SourcePrefab => sourcePrefab; // 他のファイルから値は変更させないが中身だけ見せる
+    protected virtual float TimeScale => 1.0f;
 
     public int Damage => damage;
 
@@ -144,12 +145,27 @@ public class BulletBase : MonoBehaviour
     {
         if (!initialized) return;
 
+        if (!CanRunGameLogic())
+        {
+            if(rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+
+            return;
+        }
+
         Move();
+    }
+
+    protected bool CanRunGameLogic()
+    {
+        return GameManager.Instance == null || GameManager.Instance.CurrentState == GameState.Playing;
     }
 
     protected virtual void Move()
     {
-        rb.linearVelocity = moveDirection * moveSpeed;
+        rb.linearVelocity = moveDirection * moveSpeed * TimeScale;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)

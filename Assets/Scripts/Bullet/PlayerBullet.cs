@@ -7,6 +7,8 @@ public class PlayerBullet : BulletBase
     // Triggerİ’è‚³‚ê‚½Collider‚ÉÚG‚µ‚½‚Æ‚«‚ÉUnity‚©‚ç©“®‚ÅŒÄ‚Î‚ê‚éŠÖ”
     protected override void OnTriggerEnter2D(Collider2D other)
     {
+        if (!CanRunGameLogic()) return;
+
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy == null) return;
 
