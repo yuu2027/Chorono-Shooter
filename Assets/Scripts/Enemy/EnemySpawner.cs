@@ -63,6 +63,25 @@ public class EnemySpawner : MonoBehaviour
     private float elapsedTime; // Œo‰ßŠÔ
     private bool isSpawning;   // Œ»İA“G‚ÌoŒ»ˆ—‚ğ“®‚©‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 
+    public bool IsFinished
+    {
+        get
+        {
+            if (!isSpawning) return false;
+
+            for(int i = 0; i < spawnRules.Count; i++)
+            {
+                EnemySpawnRuntimeRule rule = spawnRules[i];
+                if (rule == null) continue;
+                if(rule.endTime <= 0.0f || elapsedTime <= rule.endTime) return false;
+                CleanupAliveEnemies(rule);
+                if (rule.aliveEnemies.Count > 0) return false;
+            }
+
+            return true;
+        }
+    }
+
     private void Awake()
     {
         if (targetCamera == null)
@@ -95,6 +114,7 @@ public class EnemySpawner : MonoBehaviour
             TickRule(spawnRules[i]);
         }
     }
+
 
     private bool CanSpawn()
     {
@@ -192,6 +212,8 @@ public class EnemySpawner : MonoBehaviour
             Quaternion.identity,
             enemyParent
         );
+
+        enemy.SetTargetCamera(targetCamera != null ? targetCamera : Camera.main);
 
         rule.aliveEnemies.Add(enemy);
     }

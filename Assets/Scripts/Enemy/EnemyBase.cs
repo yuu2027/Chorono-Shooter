@@ -1,4 +1,3 @@
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
@@ -10,9 +9,9 @@ public class EnemyBase : MonoBehaviour
 
     [Header("Screen Out Settings")]
     [SerializeField] private bool destroyWhenOutOfScreen = true; // 画面外に出た敵を削除するかどうか
-    [SerializeField] private Camera targetCamera;                // どのカメラを基準に画面外判定をするか
     [SerializeField] private float viewportMargin = 0.2f;        // 画面外判定に少し余白を持たせるための値
 
+    private Camera targetCamera;
     private Rigidbody2D rb; // Rigidbody2D用の変数
     protected Collider2D[] myColliders;
     private int currentHp;  // 現在のHP
@@ -22,6 +21,11 @@ public class EnemyBase : MonoBehaviour
     public int CurrentHp => currentHp;       // 読み取り専用のプロパティ
     public int MaxHp => Mathf.Max(1, maxHp); // 読み取り専用のプロパティ
     public int ScoreValue => scoreValue;     // 読み取り専用のプロパティ
+
+    public void SetTargetCamera(Camera camera)
+    {
+        targetCamera = camera;
+    }
 
     protected virtual void Awake()
     {

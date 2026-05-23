@@ -10,9 +10,17 @@ public class PlayerBullet : BulletBase
         if (!CanRunGameLogic()) return;
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();
-        if (enemy == null) return;
+        if (enemy != null)
+        {
+            enemy.TakeDamage(damage);
+            ReturnToPool();
+        }
 
-        enemy.TakeDamage(damage);
-        ReturnToPool();
+        BossController boss = other.GetComponent<BossController>();
+        if(boss != null)
+        {
+            boss.TakeDamage(damage);
+            ReturnToPool();
+        }
     }
 }
