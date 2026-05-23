@@ -38,7 +38,7 @@ public class NormalEnemy : EnemyBase
     {
         if (enemyBulletPrefab == null) return;
 
-        attackTimer -= Time.deltaTime;
+        attackTimer -= TimeController.EnemyDeltaTime;
         if (attackTimer > 0.0f) return;
 
         attackTimer = Mathf.Max(0.01f, attackInterval);

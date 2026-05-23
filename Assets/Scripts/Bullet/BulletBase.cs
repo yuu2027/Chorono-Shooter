@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
@@ -19,14 +20,13 @@ public class BulletBase : MonoBehaviour
 
     private BulletPool bulletPool;
     private BulletBase sourcePrefab;
-    private Coroutine lifeTimeCoroutine;
     private bool released = true;
+    private float remainingLifeTime;
 
     private readonly List<Collider2D> ignoredOwnerColliders = new List<Collider2D>();
 
     public BulletBase SourcePrefab => sourcePrefab; // 他のファイルから値は変更させないが中身だけ見せる
     protected virtual float TimeScale => 1.0f;
-
     public int Damage => damage;
 
     protected Vector2 direction;
@@ -64,27 +64,38 @@ public class BulletBase : MonoBehaviour
         released = false;
         initialized = true;
 
-        StopLifeTimeCoroutine();
         RestoreOwnerCollision();
 
         moveDirection = direction.sqrMagnitude > 0.0f ? direction.normalized : Vector2.up;
         moveSpeed = speed > 0.0f ? speed : defaultSpeed;
         damage = bulletDamage > 0 ? bulletDamage : defaultDamage;
+        remainingLifeTime = lifeTime > 0.0f ? lifeTime : defaultLifeTime;
 
         IgnoreOwnerCollision(ownerColliders);
-        
-        float finalLifeTime = lifeTime > 0.0f ? lifeTime : defaultLifeTime;
-        lifeTimeCoroutine = StartCoroutine(LifeTimeRoutine(finalLifeTime));
     }
 
+    protected virtual void Update()
+    {
+        if (!initialized) return;
+        if(!CanRunGameLogic()) return;
+
+        remainingLifeTime -= Time.deltaTime * TimeScale;
+
+        if (remainingLifeTime <= 0.0f)
+        {
+            ReturnToPool();
+        }
+    }
+
+    // プールに弾を集める
     protected void ReturnToPool()
     {
         if(released) return;
 
         released = true;
         initialized = false;
+        remainingLifeTime = 0.0f;
 
-        StopLifeTimeCoroutine();
         RestoreOwnerCollision();
 
         if(rb!= null)
@@ -101,24 +112,6 @@ public class BulletBase : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    // 弾の寿命を管理する関数
-    private IEnumerator LifeTimeRoutine(float lifeTime)
-    {
-        yield return new WaitForSeconds(lifeTime);
-
-        lifeTimeCoroutine = null;
-        ReturnToPool();
-    }
-
-    // LifeTimeRoutineを止めるための関数
-    private void StopLifeTimeCoroutine()
-    {
-        if (lifeTimeCoroutine == null) return;
-        
-        StopCoroutine(lifeTimeCoroutine);
-        lifeTimeCoroutine = null;
     }
 
     // 一時的に無効化していた発射者との当たり判定を元に戻す処理
@@ -158,6 +151,7 @@ public class BulletBase : MonoBehaviour
         Move();
     }
 
+    // ゲームがプレイ中か判定
     protected bool CanRunGameLogic()
     {
         return GameManager.Instance == null || GameManager.Instance.CurrentState == GameState.Playing;

@@ -34,7 +34,12 @@ public class PlayerShooter : MonoBehaviour
     private bool IsShootPressed()
     {
         Keyboard keyboard = Keyboard.current;                   // 現在使用されているキーボードを取得
-        return keyboard != null && keyboard.spaceKey.isPressed; // nullではない⋀スペースキーが押されたときTrue
+        Mouse mouse = Mouse.current;                            // 現在使用されているマウスを取得
+
+        bool keyboardShoot = keyboard != null && keyboard.spaceKey.isPressed;
+        bool mouseShoot = mouse != null && mouse.leftButton.isPressed;
+
+        return keyboardShoot || mouseShoot; // スペースキーもしくは左クリックが押されたときTrue
     }
 
     // 弾丸を生成する関数
