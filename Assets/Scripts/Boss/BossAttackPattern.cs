@@ -1,5 +1,3 @@
-using System.Diagnostics.Contracts;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class BossAttackPattern : MonoBehaviour
