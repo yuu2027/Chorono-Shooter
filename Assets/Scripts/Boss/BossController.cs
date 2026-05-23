@@ -66,6 +66,7 @@ public class BossController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (damage <= 0) return;
+        if (currentState == BossState.Dead) return;
 
         currentHp = Mathf.Max(0, currentHp - damage);
         HealthChanged?.Invoke(currentHp, maxHp);

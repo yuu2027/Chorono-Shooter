@@ -7,6 +7,11 @@ public class GameStateView : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject gameClearPanel;
 
+    [Header("Result Views")]
+    [SerializeField] private ResultSummaryView gameOverResultView;
+    [SerializeField] private ResultSummaryView gameClearResultView;
+
+
     private void Start()
     {
         if (GameManager.Instance != null)
@@ -57,12 +62,14 @@ public class GameStateView : MonoBehaviour
         if (state == GameState.GameOver && gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
+            gameOverResultView?.SetResult(GameManager.Instance);
             return;
         }
 
         if (state == GameState.GameClear && gameClearPanel != null)
         {
             gameClearPanel.SetActive(true);
+            gameOverResultView?.SetResult(GameManager.Instance);
         }
     }
 

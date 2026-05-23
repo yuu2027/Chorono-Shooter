@@ -14,6 +14,7 @@ public class PlayerBullet : BulletBase
         {
             enemy.TakeDamage(damage);
             ReturnToPool();
+            return;
         }
 
         BossController boss = other.GetComponentInParent<BossController>();
