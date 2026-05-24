@@ -20,7 +20,7 @@ public class StageManager : MonoBehaviour
         if(enemySpawner == null || !enemySpawner.IsFinished) return;
         if (bossPrefab == null || bossSpawnPoint == null) return;
 
-        GameObject bossObject = Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
+        GameObject bossObject = Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.Euler(0.0f, 0.0f, 180.0f));
         ActiveBoss = bossObject.GetComponent<BossController>();
 
         bossSpawned = true;

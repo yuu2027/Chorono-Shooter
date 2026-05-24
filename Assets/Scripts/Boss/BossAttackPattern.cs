@@ -50,4 +50,13 @@ public class BossAttackPattern : MonoBehaviour
 
         BulletPool.Instance.Spawn(enemyBulletPrefab, firePoint.position, Quaternion.Euler(0.0f, 0.0f, angle), finalDirection, bulletSpeed, bulletLifeTime, bulletDamage, ownerColliders);
     }
+
+    public void ShootHomingBullet()
+    {
+        PlayerHealth player = FindAnyObjectByType<PlayerHealth>();
+        if (player == null) return;
+
+        Vector2 direction = player.transform.position - firePoint.position;
+        SpawnBullet(direction);
+    }
 }

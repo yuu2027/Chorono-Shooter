@@ -209,7 +209,7 @@ public class EnemySpawner : MonoBehaviour
         EnemyBase enemy = Instantiate(
             prefabEnemy,
             GetRandomSpawnPosition(rule),
-            Quaternion.identity,
+            Quaternion.Euler(0.0f, 0.0f, 180.0f),
             enemyParent
         );
 

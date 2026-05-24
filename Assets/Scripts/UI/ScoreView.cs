@@ -25,6 +25,6 @@ public class ScoreView : MonoBehaviour
     {
         if (scoreText == null) return;
 
-        scoreText.text = prefix + score;
+        scoreText.text = $"{prefix}: {score}";
     }
 }

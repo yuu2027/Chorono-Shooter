@@ -59,6 +59,10 @@ public class PlayerHealth : MonoBehaviour
         if (damage <= 0) return;
 
         currentHp = Mathf.Max(currentHp - damage, 0);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.AddHitCount();
+        }
         NotifyHealthChanged(); // イベントを通知
         onDamaged.Invoke();    // UnityEventに登録されている処理を実行
         Damaged?.Invoke();     // C#イベントに登録されている関数を実行

@@ -69,7 +69,7 @@ public class GameStateView : MonoBehaviour
         if (state == GameState.GameClear && gameClearPanel != null)
         {
             gameClearPanel.SetActive(true);
-            gameOverResultView?.SetResult(GameManager.Instance);
+            gameClearResultView?.SetResult(GameManager.Instance);
         }
     }
 

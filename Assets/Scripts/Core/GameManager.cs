@@ -16,11 +16,13 @@ public class GameManager : MonoBehaviour
     public int Score { get; private set; }
     public int killCount {  get; private set; }
     public float PlayTime {  get; private set; }
+    public int HitCount {  get; private set; }
 
     public event Action<GameState> StateChanged;
     public event Action<int> ScoreChanged;
     public event Action<int> killCountChanged;
     public event Action<float> PlayTimeChanged;
+    public event Action<int> HitCountChanged;
 
     private void Awake()
     {
@@ -64,10 +66,12 @@ public class GameManager : MonoBehaviour
         Score = 0;
         killCount = 0;
         PlayTime = 0.0f;
+        HitCount = 0;
 
         ScoreChanged?.Invoke(Score);
         killCountChanged?.Invoke(killCount);
         PlayTimeChanged?.Invoke(PlayTime);
+        HitCountChanged?.Invoke(HitCount);
 
         ChangeState(GameState.Playing);
 
@@ -157,6 +161,14 @@ public class GameManager : MonoBehaviour
 
         Score += value;
         ScoreChanged?.Invoke(Score);
+    }
+
+    public void AddHitCount()
+    {
+        if (CurrentState != GameState.Playing) return;
+
+        HitCount++;
+        HitCountChanged?.Invoke(HitCount);
     }
 
     // ÉLÉãêîÇâ¡éZÇ∑ÇÈ
