@@ -48,10 +48,5 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.TogglePause();
         }
-
-        if(keyboard.rKey.wasPressedThisFrame)
-        {
-            GameManager.Instance.RetryGame();
-        }
     }
 }

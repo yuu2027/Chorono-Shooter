@@ -41,14 +41,6 @@ public class GameStateView : MonoBehaviour
         }
     }
 
-    public void RetryGame()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RetryGame();
-        }
-    }
-
     private void OnStateChanged(GameState state)
     {
         HideAll();

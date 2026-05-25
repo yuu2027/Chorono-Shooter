@@ -113,13 +113,6 @@ public class GameManager : MonoBehaviour
             ResumeGame(); // ゲーム再開
         }
     }
-    
-    // シーンを最初に戻しリトライする
-    public void RetryGame()
-    {
-        Time.timeScale = 1.0f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
 
     // ゲームオーバー状態にして敵スポーンを止める
     public void GameOver()
