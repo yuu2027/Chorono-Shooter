@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b87cf50fa922d4e81ed8f1daca7b5b, type: 3}
+  m_Name: AudioCueLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::AudioCueLibrary
+  bgmCues:
+  - id: 0
+    clip: {fileID: 8300000, guid: 6e42b1fa6bd564517862c7863db4dff2, type: 3}
+    volume: 1
+    fadeSeconds: 0
+  - id: 1
+    clip: {fileID: 8300000, guid: c56edd32ce8b5458f802b952a4a0194a, type: 3}
+    volume: 1
+    fadeSeconds: 0
+  - id: 2
+    clip: {fileID: 8300000, guid: b28fde8bab27a4a53926c087023b2d20, type: 3}
+    volume: 1
+    fadeSeconds: 0
+  - id: 3
+    clip: {fileID: 8300000, guid: 93836a80c26054a168990a027f283cb2, type: 3}
+    volume: 1
+    fadeSeconds: 0
+  - id: 4
+    clip: {fileID: 8300000, guid: 4c4fea01bfb4b4aed9cacc0dfdb6ee37, type: 3}
+    volume: 1
+    fadeSeconds: 0
+  seCues:
+  - id: 2
+    clip: {fileID: 8300000, guid: 2306177f0aba7574a871f92c1822d1b4, type: 3}
+    volume: 1
+    pitch: 0.1
+    minInterval: 0.03
+  - id: 1
+    clip: {fileID: 8300000, guid: ea0356c667e2f82498d8f4e73d9bfe88, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.03
+  - id: 3
+    clip: {fileID: 8300000, guid: 01939a2d5c910954f8fdcdd32339015a, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.1
+  - id: 6
+    clip: {fileID: 8300000, guid: c401d00c96b512e488d2e3bf5d111509, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.1
+  - id: 0
+    clip: {fileID: 8300000, guid: 2feff70340c31d34881a07963fa21dbd, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.1
+  - id: 8
+    clip: {fileID: 8300000, guid: 1ca0f68539f7c6f40a3e2e214f3b7d68, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.1
+  - id: 8
+    clip: {fileID: 8300000, guid: 92e143ebd5cf4d546a6a5cf0ca9b1eb8, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.1
+  - id: 10
+    clip: {fileID: 8300000, guid: cd1f8b7871442864e823a235417ca343, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.1
+  - id: 4
+    clip: {fileID: 8300000, guid: d4aee29185389894b9cc0d8873904a49, type: 3}
+    volume: 0.5
+    pitch: 0
+    minInterval: 0.1
+  - id: 5
+    clip: {fileID: 8300000, guid: d4aee29185389894b9cc0d8873904a49, type: 3}
+    volume: 1
+    pitch: 0
+    minInterval: 0.1

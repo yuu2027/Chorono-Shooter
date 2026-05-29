@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: e3662127289f9478fbe7a3c18c756aef
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208664
+  packageName: Ambient Sci-Fi
+  packageVersion: 1.0
+  assetPath: Assets/Music Packs/Ambient Sci-Fi/Exploration/Exploration 1/Exploration1_Full.wav
+  uploadId: 468281

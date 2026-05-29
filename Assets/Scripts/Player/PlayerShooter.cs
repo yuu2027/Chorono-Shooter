@@ -58,5 +58,9 @@ public class PlayerShooter : MonoBehaviour
         {
             Debug.LogWarning("PlayerShooter: 弾の生成に失敗しました。", this);
         }
+        else
+        {
+            AudioManager.Instance?.PlaySe(SeId.PlayerShot);
+        }
     }
 }

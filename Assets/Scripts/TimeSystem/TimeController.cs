@@ -77,5 +77,7 @@ public class TimeController : MonoBehaviour
 
         IsSlowing = value;
         SlowStateChanged?.Invoke(IsSlowing);
+
+        AudioManager.Instance?.PlaySe(IsSlowing ? SeId.SlowStart : SeId.SlowEnd);
     }
 }

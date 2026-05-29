@@ -159,6 +159,8 @@ public class BossController : MonoBehaviour
         currentState = BossState.Dead;
         BossDied?.Invoke();
 
+        AudioManager.Instance?.PlaySe(SeId.BossDestroyed);
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.AddScore(scoreValue);

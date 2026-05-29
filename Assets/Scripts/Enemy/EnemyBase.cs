@@ -136,6 +136,8 @@ public class EnemyBase : MonoBehaviour
             GameManager.Instance.AddKillCount();
         }
 
+        AudioManager.Instance?.PlaySe(SeId.EnemyDestroyed);
+
         // ScoreManagerを作ったら、ここでscoreValueを加算する。
         Destroy(gameObject);
     }

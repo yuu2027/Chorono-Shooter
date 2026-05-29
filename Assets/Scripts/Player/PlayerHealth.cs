@@ -66,6 +66,7 @@ public class PlayerHealth : MonoBehaviour
         NotifyHealthChanged(); // イベントを通知
         onDamaged.Invoke();    // UnityEventに登録されている処理を実行
         Damaged?.Invoke();     // C#イベントに登録されている関数を実行
+        AudioManager.Instance?.PlaySe(SeId.PlayerDamage);
 
         if (currentHp <= 0)
         {
@@ -128,8 +129,9 @@ public class PlayerHealth : MonoBehaviour
 
         onDied.Invoke();
         Died?.Invoke();
+        AudioManager.Instance?.PlaySe(SeId.PlayerDeath);
 
-        if(GameManager.Instance != null)
+        if (GameManager.Instance != null)
         {
             GameManager.Instance.GameOver();
         }
