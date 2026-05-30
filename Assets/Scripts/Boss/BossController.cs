@@ -151,6 +151,8 @@ public class BossController : MonoBehaviour
         {
             Die();
         }
+
+        EffectManager.Instance?.Play(EffectCueId.BossDamaged, transform.position);
     }
 
     // ƒ{ƒX‚ª€–S‚µ‚½‚Æ‚«‚Ìˆ—
@@ -159,6 +161,7 @@ public class BossController : MonoBehaviour
         currentState = BossState.Dead;
         BossDied?.Invoke();
 
+        EffectManager.Instance?.Play(EffectCueId.BossDestroyed, transform.position);
         AudioManager.Instance?.PlaySe(SeId.BossDestroyed);
 
         if (GameManager.Instance != null)

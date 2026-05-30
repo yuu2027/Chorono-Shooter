@@ -28,6 +28,10 @@ public class AudioManager : MonoBehaviour
     private Coroutine bgmFadeCoroutine;
     private BgmId? currentBgmId;
 
+    private float currentBgmCueVolume = 1f;
+    private float bgmUserVolume = 0.7f;
+    private float seUserVolume = 0.9f;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -43,9 +47,18 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        SetMasterVolume(1f); // âπó ê›íË
-        SetBgmVolume(0.7f);  // BGMâπó ê›íË
-        SetSeVolume(0.9f);   // SEâπó ê›íË
+        SetMasterVolume(1f);
+
+        if (SettingsManager.Instance != null)
+        {
+            SetBgmVolume(SettingsManager.Instance.BgmVolume);
+            SetSeVolume(SettingsManager.Instance.SeVolume);
+        }
+        else
+        {
+            SetBgmVolume(bgmUserVolume);
+            SetSeVolume(seUserVolume);
+        }
     }
 
     // BGMÇçƒê∂
@@ -87,8 +100,9 @@ public class AudioManager : MonoBehaviour
         if (IsSeCoolingDown(id, cue.minInterval)) return;
 
         lastSeTimes[id] = Time.unscaledTime;
-        seSource.pitch = cue.pitch;
-        seSource.PlayOneShot(cue.clip, cue.volume);
+        seSource.pitch = cue.pitch <= 0f ? 1f : cue.pitch;
+
+        seSource.PlayOneShot(cue.clip, cue.volume * seUserVolume);
     }
 
     public void SetMasterVolume(float value)
@@ -98,18 +112,14 @@ public class AudioManager : MonoBehaviour
 
     public void SetBgmVolume(float value)
     {
-        if (!SetMixerVolume(bgmVolumeParameter, value))
-        {
-            bgmSource.volume = Mathf.Clamp01(value);
-        }
+        bgmUserVolume = Mathf.Clamp01(value);
+        bgmSource.volume = currentBgmCueVolume * bgmUserVolume;
     }
 
     public void SetSeVolume(float value)
     {
-        if (!SetMixerVolume(seVolumeParameter, value))
-        {
-            seSource.volume = Mathf.Clamp01(value);
-        }
+        seUserVolume = Mathf.Clamp01(value);
+        seSource.volume = 1f;
     }
 
     // âπåπÇÃèÄîı
@@ -134,6 +144,9 @@ public class AudioManager : MonoBehaviour
     {
         float fadeSeconds = Mathf.Max(0f, cue.fadeSeconds);
 
+        currentBgmCueVolume = cue.volume;
+        float targetVolume = currentBgmCueVolume * bgmUserVolume;
+
         if (bgmSource.isPlaying && fadeSeconds > 0f)
         {
             yield return FadeVolume(bgmSource.volume, 0f, fadeSeconds);
@@ -145,11 +158,11 @@ public class AudioManager : MonoBehaviour
 
         if (fadeSeconds > 0f)
         {
-            yield return FadeVolume(0f, cue.volume, fadeSeconds);
+            yield return FadeVolume(0f, targetVolume, fadeSeconds);
         }
         else
         {
-            bgmSource.volume = cue.volume;
+            bgmSource.volume = targetVolume;
         }
 
         bgmFadeCoroutine = null;

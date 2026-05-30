@@ -4,13 +4,9 @@ public class GameStateView : MonoBehaviour
 {
     [Header("Panels")]
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private GameObject gameClearPanel;
 
-    [Header("Result Views")]
-    [SerializeField] private ResultSummaryView gameOverResultView;
-    [SerializeField] private ResultSummaryView gameClearResultView;
-
+    [Header("Scene Loader")]
+    [SerializeField] private SceneLoader sceneLoader;
 
     private void Start()
     {
@@ -37,6 +33,8 @@ public class GameStateView : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
+            AudioManager.Instance.PlaySe(SeId.Button);
+
             GameManager.Instance.ResumeGame();
         }
     }
@@ -51,24 +49,20 @@ public class GameStateView : MonoBehaviour
             return;
         }
 
-        if (state == GameState.GameOver && gameOverPanel != null)
+        if (state == GameState.GameOver)
         {
-            gameOverPanel.SetActive(true);
-            gameOverResultView?.SetResult(GameManager.Instance);
+            sceneLoader.LoadGameOverScene();
             return;
         }
 
-        if (state == GameState.GameClear && gameClearPanel != null)
+        if (state == GameState.GameClear)
         {
-            gameClearPanel.SetActive(true);
-            gameClearResultView?.SetResult(GameManager.Instance);
+            sceneLoader.LoadGameClearScene();
         }
     }
 
     private void HideAll()
     {
         if (pausePanel != null) pausePanel.SetActive(false);
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (gameClearPanel != null) gameClearPanel.SetActive(false);
     }
 }

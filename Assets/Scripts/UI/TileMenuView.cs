@@ -14,11 +14,13 @@ public class TileMenuView : MonoBehaviour
     {
         if (howToPanel != null)
         {
+            
             howToPanel.SetActive(false);
         }
 
         if (settingPanel != null)
         {
+            
             settingPanel.SetActive(false);
         }
     }
@@ -26,6 +28,8 @@ public class TileMenuView : MonoBehaviour
     public void ShowHowToPanel()
     {
         CloseAllPanels();
+
+        AudioManager.Instance?.PlaySe(SeId.Button);
 
         if (howToPanel != null)
         {
@@ -36,6 +40,8 @@ public class TileMenuView : MonoBehaviour
     public void ShowSettingPanel()
     {
         CloseAllPanels();
+
+        AudioManager.Instance?.PlaySe(SeId.Button);
 
         if (settingPanel != null)
         {

@@ -74,6 +74,7 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
 
+        EffectManager.Instance?.Play(EffectCueId.PlayerDamaged, transform.position);
         StartInvincible(); // 無敵にする
     }
 
@@ -129,6 +130,8 @@ public class PlayerHealth : MonoBehaviour
 
         onDied.Invoke();
         Died?.Invoke();
+
+        EffectManager.Instance?.Play(EffectCueId.PlayerDestroyed, transform.position);
         AudioManager.Instance?.PlaySe(SeId.PlayerDeath);
 
         if (GameManager.Instance != null)

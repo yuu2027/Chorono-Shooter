@@ -102,6 +102,8 @@ public class EnemyBase : MonoBehaviour
 
         float angle = Mathf.Atan2(finalDirection.y, finalDirection.x) * Mathf.Rad2Deg - 90.0f;
 
+        AudioManager.Instance?.PlaySe(SeId.EnemyShot);
+
         BulletBase bullet = BulletPool.Instance.Spawn(bulletPrefab, firePoint.position, Quaternion.Euler(0.0f, 0.0f, angle), finalDirection, speed, lifeTime, damage, myColliders);
 
         return bullet != null ? bullet.gameObject : null;
@@ -136,6 +138,7 @@ public class EnemyBase : MonoBehaviour
             GameManager.Instance.AddKillCount();
         }
 
+        EffectManager.Instance?.Play(EffectCueId.EnemyDestroyed, transform.position);
         AudioManager.Instance?.PlaySe(SeId.EnemyDestroyed);
 
         // ScoreManagerを作ったら、ここでscoreValueを加算する。

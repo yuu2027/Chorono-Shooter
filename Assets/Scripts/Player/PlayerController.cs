@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
         return GameManager.Instance == null || GameManager.Instance.CurrentState == GameState.Playing;
     }
 
-    // リトライとポーズボタンの実装
+    // ポーズボタンの実装
     private void HandleSystemInput()
     {
         Keyboard keyboard = Keyboard.current;
@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour
 
         if (keyboard.escapeKey.wasPressedThisFrame)
         {
+            AudioManager.Instance.PlaySe(SeId.Pause);
+
             GameManager.Instance.TogglePause();
         }
     }

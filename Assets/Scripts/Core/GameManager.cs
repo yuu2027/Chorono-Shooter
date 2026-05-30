@@ -156,6 +156,7 @@ public class GameManager : MonoBehaviour
         ScoreChanged?.Invoke(Score);
     }
 
+    // UŒ‚‰ñ”
     public void AddHitCount()
     {
         if (CurrentState != GameState.Playing) return;

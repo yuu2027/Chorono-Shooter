@@ -10,21 +10,29 @@ public class SceneLoader : MonoBehaviour
 
     public void StartGame()
     {
+        AudioManager.Instance?.PlaySe(SeId.Button);
+
         LoadScene(GameSceneName);
     }
 
     public void RetryGame()
     {
+        AudioManager.Instance?.PlaySe(SeId.Button);
+
         LoadScene(GameSceneName);
     }
 
     public void LoadTitleScene()
     {
+        AudioManager.Instance?.PlaySe(SeId.Button);
+
         LoadScene(TitleSceneName);
     }
 
     public void LoadGameScene()
     {
+        AudioManager.Instance?.PlaySe(SeId.Button);
+
         LoadScene(GameSceneName);
     }
 
