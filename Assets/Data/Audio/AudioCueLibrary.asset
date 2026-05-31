@@ -59,16 +59,6 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     minInterval: 0.1
-  - id: 8
-    clip: {fileID: 8300000, guid: 1ca0f68539f7c6f40a3e2e214f3b7d68, type: 3}
-    volume: 1
-    pitch: 1
-    minInterval: 0.1
-  - id: 8
-    clip: {fileID: 8300000, guid: 92e143ebd5cf4d546a6a5cf0ca9b1eb8, type: 3}
-    volume: 1
-    pitch: 1
-    minInterval: 0.1
   - id: 10
     clip: {fileID: 8300000, guid: cd1f8b7871442864e823a235417ca343, type: 3}
     volume: 1
@@ -81,6 +71,26 @@ MonoBehaviour:
     minInterval: 0.1
   - id: 5
     clip: {fileID: 8300000, guid: d4aee29185389894b9cc0d8873904a49, type: 3}
+    volume: 1
+    pitch: 1
+    minInterval: 0.1
+  - id: 13
+    clip: {fileID: 8300000, guid: 60eb2a9293d47da4988af05c6bdc0989, type: 3}
+    volume: 1
+    pitch: 1
+    minInterval: 0.1
+  - id: 8
+    clip: {fileID: 8300000, guid: 8524588a69a4f3e40bb597b6221138f1, type: 3}
+    volume: 1
+    pitch: 1
+    minInterval: 0.1
+  - id: 7
+    clip: {fileID: 8300000, guid: 8b3f676fe7b41044495a2964396b8ba3, type: 3}
+    volume: 1
+    pitch: 1
+    minInterval: 0.1
+  - id: 9
+    clip: {fileID: 8300000, guid: 1ca0f68539f7c6f40a3e2e214f3b7d68, type: 3}
     volume: 1
     pitch: 1
     minInterval: 0.1

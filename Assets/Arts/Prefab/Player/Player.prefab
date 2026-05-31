@@ -453,6 +453,10 @@ MonoBehaviour:
   onDied:
     m_PersistentCalls:
       m_Calls: []
+  brokenPlayerSprite: {fileID: 7961862265945016625, guid: 29e4100ba9669ec418ae27fa71fa5f9e, type: 3}
+  blinkInterval: 0.08
+  blinkAlpha: 0.25
+  deathSequenceTime: 1
 --- !u!1 &2838608302151621670
 GameObject:
   m_ObjectHideFlags: 0

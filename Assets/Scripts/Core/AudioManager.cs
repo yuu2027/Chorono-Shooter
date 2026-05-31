@@ -105,6 +105,14 @@ public class AudioManager : MonoBehaviour
         seSource.PlayOneShot(cue.clip, cue.volume * seUserVolume);
     }
 
+    public void StopSe(float fadeSeconds = 3.0f)
+    {
+        if (seSource != null)
+        {
+            seSource.Stop();
+        }
+    }
+
     public void SetMasterVolume(float value)
     {
         SetMixerVolume(masterVolumeParameter, value);

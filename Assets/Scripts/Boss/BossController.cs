@@ -1,6 +1,8 @@
 using System;
-using UnityEditor.Experimental.GraphView;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class BossController : MonoBehaviour
@@ -18,6 +20,16 @@ public class BossController : MonoBehaviour
     [SerializeField] private Vector2 minPosition = new Vector2(-6.5f, 1.0f);
     [SerializeField] private Vector2 maxPosition = new Vector2(6.5f, 4.0f);
     [SerializeField] private float arriveDistance = 0.15f;
+
+    [SerializeField] private Sprite brokenBossSprite;
+    [SerializeField] private float deathExplosionInterval = 0.35f;
+    [SerializeField] private float deathFallDuration = 1.0f;
+    [SerializeField] private float deathFallDistance = 6.0f;
+    [SerializeField] private float smokeInterval = 0.2f;
+
+    private SpriteRenderer spriteRenderer;
+    private Collider2D[] colliders;
+    private bool entranceWaiting;
 
     private Rigidbody2D rb;
     private BossAttackPattern attackPattern;
@@ -38,6 +50,8 @@ public class BossController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         attackPattern = GetComponent<BossAttackPattern>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        colliders = GetComponentsInChildren<Collider2D>();
 
         rb.gravityScale = 0.0f;
         rb.freezeRotation = true;
@@ -78,9 +92,27 @@ public class BossController : MonoBehaviour
         MoveToTarget();
     }
 
+    public void StartEntranceWait(float duration)
+    {
+        StartCoroutine(EntranceWaitCoroutine(duration));
+    }
+
+    // ボスの登場
+    private IEnumerator EntranceWaitCoroutine(float duration)
+    {
+        entranceWaiting = true;
+        if (rb != null) rb.linearVelocity = Vector2.zero; // 下に落ちる処理
+
+        yield return new WaitForSeconds(duration);
+
+        entranceWaiting = false;
+        GameManager.Instance?.ResumeFromCinematic();
+    }
+
     private bool CanRun()
     {
         if (currentState == BossState.Dead) return false;
+        if (entranceWaiting) return false;
         return GameManager.Instance == null || GameManager.Instance.CurrentState == GameState.Playing;
     }
 
@@ -153,23 +185,93 @@ public class BossController : MonoBehaviour
         }
 
         EffectManager.Instance?.Play(EffectCueId.BossDamaged, transform.position);
+        AudioManager.Instance?.PlaySe(SeId.BossDamage);
+
     }
 
     // ボスが死亡したときの処理
     private void Die()
     {
+        if (currentState == BossState.Dead) return;
+
+        BulletPool.Instance.ClearAllActiveBullets();
+
         currentState = BossState.Dead;
         BossDied?.Invoke();
 
-        EffectManager.Instance?.Play(EffectCueId.BossDestroyed, transform.position);
-        AudioManager.Instance?.PlaySe(SeId.BossDestroyed);
-
-        if (GameManager.Instance != null)
+        if (GameManager.Instance != null) // ゲームクリア状態にする
         {
-            GameManager.Instance.AddScore(scoreValue);
-            GameManager.Instance.GameClear();
+            GameManager.Instance?.AddScore(scoreValue);
+            GameManager.Instance?.EnterCinematic();
         }
 
-        Destroy(gameObject);
+        foreach (Collider2D col in colliders) col.enabled = false; // コライダーを無効にする
+        StartCoroutine(DeathSequenceCoroutine());
+    }
+
+    private IEnumerator DeathSequenceCoroutine()
+    {
+        // 追加や削除ができないリスト
+        IReadOnlyList<Transform> points = attackPattern != null ? attackPattern.GetFirePoints() : null;
+
+        // 順番に爆破つさせる
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 position = points != null && points.Count > 0 ? points[i % points.Count].position : transform.position;
+
+            EffectManager.Instance?.Play(EffectCueId.BossDamaged, position);
+            AudioManager.Instance?.PlaySe(SeId.BossDamage);
+            yield return new WaitForSecondsRealtime(deathExplosionInterval); // 待つ
+        }
+
+        yield return new WaitForSecondsRealtime(1.5f);
+        EffectManager.Instance?.Play(EffectCueId.BossDamaged, transform.position, 4.0f);
+        AudioManager.Instance?.PlaySe(SeId.BossDestroyed);
+
+        // 壊れたボスに変更
+        if (spriteRenderer != null)
+        {
+            if (brokenBossSprite != null) spriteRenderer.sprite = brokenBossSprite;
+            else spriteRenderer.color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
+        }
+
+        Vector3 start = transform.position;
+        Vector3 end = start + Vector3.down * deathFallDistance;
+        float elapsed = 0.0f;
+        float smokeTimer = 0.0f;
+
+        // ボスを下に移動させながら煙を出す
+        while (elapsed < deathFallDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / deathFallDuration);
+
+            transform.position = Vector3.Lerp(start, end, t);
+
+            if (spriteRenderer != null)
+            {
+                Color color = spriteRenderer.color;
+                color.a = 1.0f - t;
+                spriteRenderer.color = color;
+            }
+
+            smokeTimer -= Time.deltaTime;
+            if (smokeTimer <= 0.0f)
+            {
+                GameObject smoke = EffectManager.Instance?.Play(EffectCueId.BossSmoke, transform.position);
+
+                if (smoke != null)
+                {
+                    smoke.transform.SetParent(transform, true);
+                }
+
+                smokeTimer = smokeInterval;
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForSecondsRealtime(1.0f);
+        GameManager.Instance?.GameClear();
     }
 }

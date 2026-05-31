@@ -161,6 +161,11 @@ public class BulletBase : MonoBehaviour
         rb.linearVelocity = moveDirection * moveSpeed * TimeScale;
     }
 
+    public void Despawn()
+    {
+        ReturnToPool();
+    }
+
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         ReturnToPool();

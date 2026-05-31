@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EffectManager : MonoBehaviour
 {
@@ -17,25 +18,33 @@ public class EffectManager : MonoBehaviour
         Instance = this;
     }
 
-    public void Play(EffectCueId id, Vector3 position)
+    public GameObject Play(EffectCueId id, Vector3 position, float scaleMultiplier = 1.0f)
     {
-        Play(id, position, Quaternion.identity);
+        return Play(id, position, Quaternion.identity, scaleMultiplier);
     }
 
-    public void Play(EffectCueId id, Vector3 position, Quaternion rotation)
+    public GameObject Play(EffectCueId id, Vector3 position, Quaternion rotation, float scaleMultiplier = 1.0f)
     {
-        if (library == null) return;
-        if (!library.TryGetCue(id, out EffectCueLibrary.EffectCue cue)) return;
-        if (cue.prefab == null) return;
+        if (library == null) return null;
+        if (!library.TryGetCue(id, out EffectCueLibrary.EffectCue cue)) return null;
+        if (cue.prefab == null) return null;
 
         Quaternion finalRotation = cue.useRotation ? rotation : Quaternion.identity;
         GameObject effect = Instantiate(cue.prefab, position + cue.offset, finalRotation);
-        effect.transform.localScale = cue.scale;
+
+        Vector2 scale = cue.scale;
+        if (scale.x <= 0.0f) scale.x = 1.0f;
+        if (scale.y <= 0.0f) scale.y = 1.0f;
+
+        float finalMultiplier = Mathf.Max(0.0f, scaleMultiplier); 
+        effect.transform.localScale = new Vector3(scale.x * finalMultiplier, scale.y * finalMultiplier, 1.0f);
 
         if (cue.lifeTime > 0.0f)
         {
             Destroy(effect, cue.lifeTime);
         }
+
+        return effect;
     }
 
     private void OnDestroy()

@@ -12,8 +12,10 @@ public class EffectCueLibrary : ScriptableObject
         public GameObject prefab;
         public float lifeTime = 2.0f;
         public Vector3 offset;
-        public Vector3 scale = Vector3.one;
         public bool useRotation;
+
+        [Header("Scale")]
+        public Vector3 scale = Vector3.one;
     }
 
     [SerializeField] private EffectCue[] cues;

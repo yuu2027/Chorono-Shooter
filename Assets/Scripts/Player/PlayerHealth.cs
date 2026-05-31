@@ -24,6 +24,14 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private UnityEvent onDamaged = new UnityEvent();                       // プレイヤーがダメージを受けたときのイベント
     [SerializeField] private UnityEvent onDied = new UnityEvent();                          // プレイヤーが死亡したときのイベント
 
+    [SerializeField] private Sprite brokenPlayerSprite;
+    [SerializeField] private float blinkInterval = 0.08f;
+    [SerializeField] private float blinkAlpha = 0.25f;
+    [SerializeField] private float deathSequenceTime = 1.0f;
+
+    private SpriteRenderer spriteRenderer;
+    private Collider2D[] colliders;
+
     private int currentHp;                     // 現在のHP
     private bool isInvincible;                 // 無敵フラグ
     private bool isDead;                       // 死亡フラグ
@@ -41,6 +49,8 @@ public class PlayerHealth : MonoBehaviour
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        colliders = GetComponentsInChildren<Collider2D>();
         currentHp = maxHp;
     }
 
@@ -101,11 +111,32 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator InvincibleCoroutine()
     {
         isInvincible = true;
+        float elapsed = 0.0f;
 
-        yield return new WaitForSeconds(invincibleTime);
+        // 点滅処理
+        while (elapsed < invincibleTime)
+        {
+            SetSpriteAlpha(blinkAlpha);
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
 
+            SetSpriteAlpha(1.0f);
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
+
+        SetSpriteAlpha(1.0f); // 元に戻す
         isInvincible = false;
         invincibleCoroutine = null;
+    }
+
+    // αを変更しプレイヤーを点滅
+    private void SetSpriteAlpha(float alpha)
+    {
+        if (spriteRenderer == null) return;
+        Color color = spriteRenderer.color;
+        color.a = alpha;
+        spriteRenderer.color = color;
     }
 
     // 死亡処理
@@ -132,15 +163,27 @@ public class PlayerHealth : MonoBehaviour
         Died?.Invoke();
 
         EffectManager.Instance?.Play(EffectCueId.PlayerDestroyed, transform.position);
+        EffectManager.Instance?.Play(EffectCueId.PlayerSmoke, transform.position);
         AudioManager.Instance?.PlaySe(SeId.PlayerDeath);
 
-        if (GameManager.Instance != null)
+        // 壊れたプレイヤーに差し替える
+        if (spriteRenderer != null && brokenPlayerSprite != null)
         {
-            GameManager.Instance.GameOver();
+            spriteRenderer.sprite = brokenPlayerSprite;
+            SetSpriteAlpha(1.0f);
         }
 
-        Debug.Log("Game Over", this);
+        foreach (Collider2D col in colliders) col.enabled = false; // コライダーを無効
 
+        GameManager.Instance?.EnterCinematic();
+        StartCoroutine(DeathSequenceCoroutine());
+    }
+
+    private IEnumerator DeathSequenceCoroutine()
+    {
+        yield return new WaitForSeconds(deathSequenceTime);
+
+        GameManager.Instance?.GameOver();
         Destroy(gameObject);
     }
 

@@ -43,3 +43,15 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 0}
     useRotation: 0
+  - id: 5
+    prefab: {fileID: 100000, guid: 6f8449a4663a4fd44b6140772d4f39f9, type: 3}
+    lifeTime: 10
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5, y: 0.5, z: 0}
+    useRotation: 0
+  - id: 6
+    prefab: {fileID: 100000, guid: 6f8449a4663a4fd44b6140772d4f39f9, type: 3}
+    lifeTime: 10
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5, y: 0.5, z: 0}
+    useRotation: 0

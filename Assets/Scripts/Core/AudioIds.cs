@@ -16,9 +16,11 @@ public enum SeId
     PlayerDamage,
     PlayerDeath,
     EnemyDestroyed,
+    BossDamage,
     BossDestroyed,
     SlowStart,
     SlowEnd,
     Pause,
-    Resume
+    Resume,
+    Emergency
 }

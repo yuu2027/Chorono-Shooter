@@ -16,7 +16,7 @@ MonoBehaviour:
   - enemyId: NormalEnemy
     enemyPrefab: {fileID: 3298378965322456175, guid: 673a46e9fc682f44780f48c46a2e15d5, type: 3}
     startTime: 0
-    endTime: 40
+    endTime: 5
     spawnInterval: 2
     maxAlive: 6
     minViewportX: 0
@@ -24,8 +24,8 @@ MonoBehaviour:
     spawnViewportY: 1.1
   - enemyId: ChaseEnemy
     enemyPrefab: {fileID: 7591703122023127744, guid: 8664f449e93fefa40946d58b01e190d7, type: 3}
-    startTime: 20
-    endTime: 40
+    startTime: 0
+    endTime: 5
     spawnInterval: 3
     maxAlive: 3
     minViewportX: 0
@@ -33,8 +33,8 @@ MonoBehaviour:
     spawnViewportY: 1.1
   - enemyId: CircleShotEnemy
     enemyPrefab: {fileID: 4393732768827202, guid: 830ccd2d62839e645a374ded8025dfbe, type: 3}
-    startTime: 40
-    endTime: 60
+    startTime: 0
+    endTime: 5
     spawnInterval: 4
     maxAlive: 2
     minViewportX: 0

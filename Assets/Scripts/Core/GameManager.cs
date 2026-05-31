@@ -174,6 +174,19 @@ public class GameManager : MonoBehaviour
         killCountChanged?.Invoke(killCount);
     }
 
+    public void EnterCinematic()
+    {
+        if (CurrentState != GameState.Playing) return;
+        Time.timeScale = 1.0f;
+        ChangeState(GameState.Cinematic);
+    }
+
+    public void ResumeFromCinematic()
+    {
+        if (CurrentState != GameState.Cinematic) return;
+        ChangeState(GameState.Playing);
+    }
+
     // ƒQ[ƒ€ó‘Ô‚ğ•ÏX‚·‚é
     private void ChangeState(GameState nextState)
     {

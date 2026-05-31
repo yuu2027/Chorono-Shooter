@@ -4,5 +4,7 @@ public enum EffectCueId
     PlayerDamaged,
     PlayerDestroyed,
     BossDamaged,
-    BossDestroyed
+    BossDestroyed,
+    PlayerSmoke,
+    BossSmoke
 }

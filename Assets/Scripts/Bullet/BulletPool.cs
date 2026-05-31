@@ -10,6 +10,7 @@ public class BulletPool : MonoBehaviour
 
     private static BulletPool instance; // BulletPool の実体を1つだけ覚えておくための変数
     private readonly Dictionary<BulletBase, ObjectPool<BulletBase>> pools = new Dictionary<BulletBase, ObjectPool<BulletBase>>(); // 弾Prefabごとに別々のプールを管理する辞書
+    private readonly List<BulletBase> activeBullets = new List<BulletBase>();
 
     // BulletPoolの準備
     public static BulletPool Instance
@@ -114,6 +115,11 @@ public class BulletPool : MonoBehaviour
     // 弾を有効化して、ゲーム画面で使える状態にする
     private void OnGetBullet(BulletBase bullet)
     {
+        if (!activeBullets.Contains(bullet))
+        {
+            activeBullets.Add(bullet);
+        }
+
         bullet.gameObject.SetActive(true);
     }
 
@@ -122,6 +128,21 @@ public class BulletPool : MonoBehaviour
     {
         bullet.transform.SetParent(transform); // bulletの親オブジェクトをBulletPoolにする
         bullet.gameObject.SetActive(false);
+    }
+
+    public void ClearAllActiveBullets()
+    {
+        List<BulletBase> snapshot = new List<BulletBase>(activeBullets);
+
+        for (int i = 0; i < snapshot.Count; i++)
+        {
+            if (snapshot[i] != null)
+            {
+                snapshot[i].Despawn();
+            }
+        }
+
+        activeBullets.Clear();
     }
 
     // プールが弾を保持できない場合や、プール側が弾を破棄する必要がある場合に呼ばれる関数
