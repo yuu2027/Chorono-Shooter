@@ -126,6 +126,7 @@ public class BulletPool : MonoBehaviour
     // 弾をプールに戻したときに呼ばれる関数
     private void OnReleaseBullet(BulletBase bullet)
     {
+        activeBullets.Remove(bullet);
         bullet.transform.SetParent(transform); // bulletの親オブジェクトをBulletPoolにする
         bullet.gameObject.SetActive(false);
     }

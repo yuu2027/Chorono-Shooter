@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 478699403}
   - component: {fileID: 478699402}
   m_Layer: 5
-  m_Name: SurvivalTime
+  m_Name: PlayTime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1441,7 +1441,7 @@ GameObject:
   - component: {fileID: 1071639166}
   - component: {fileID: 1071639165}
   m_Layer: 5
-  m_Name: SurvivalTimeText
+  m_Name: PlayTimeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SURVIVAL TIME
+  m_text: PLAY TIME
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ab8be6e68aeeceb499085d9e564fc2a5, type: 2}
   m_sharedMaterial: {fileID: -5820593530434105675, guid: ab8be6e68aeeceb499085d9e564fc2a5, type: 2}

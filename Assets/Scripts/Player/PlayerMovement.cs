@@ -52,6 +52,16 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    public void SetMoveInput(Vector2 input)
+    {
+        moveInput = input;
+
+        if (moveInput.sqrMagnitude > 1.0f)
+        {
+            moveInput.Normalize();
+        }
+    }
+
     // ƒvƒŒƒCƒ„[‚ğˆÚ“®‚³‚¹‚éŠÖ”
     public void Move()
     {

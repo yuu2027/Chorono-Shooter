@@ -49,8 +49,8 @@ public class TimeController : MonoBehaviour
             return;
         }
         
-        bool wantsSlow = Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed; // キー入力
-        bool hasGauge = IsSlowing ? Gauge > 0.0f : Gauge >= minGaugeToStart;                  // スローを使えるだけのゲージがあるかを判定
+        bool wantsSlow = PlayerInputReader.Instance != null && PlayerInputReader.Instance.SlowHeld; // キー入力
+        bool hasGauge = IsSlowing ? Gauge > 0.0f : Gauge >= minGaugeToStart;                        // スローを使えるだけのゲージがあるかを判定
 
         SetSlowing(wantsSlow && hasGauge); // IsSlowingをtrueかfalseに変える
 

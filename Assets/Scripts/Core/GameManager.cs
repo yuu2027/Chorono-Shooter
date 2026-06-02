@@ -127,6 +127,8 @@ public class GameManager : MonoBehaviour
             enemySpawner.StopSpawning();
         }
 
+        GameResultStore.Save(Score, killCount, PlayTime, HitCount);
+
         ChangeState(GameState.GameOver);
     }
 
@@ -142,6 +144,8 @@ public class GameManager : MonoBehaviour
         {
             enemySpawner.StopSpawning();
         }
+
+        GameResultStore.Save(Score, killCount, PlayTime, HitCount);
 
         ChangeState(GameState.GameClear);
     }

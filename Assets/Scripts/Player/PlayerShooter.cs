@@ -20,11 +20,11 @@ public class PlayerShooter : MonoBehaviour
     }
 
     // 連射間隔を管理し、キー入力されると弾を生成する関数
-    public void TickShoot()
+    public void TickShoot(bool shootHeld)
     {
         if (shotTimer > 0.0f) shotTimer -= Time.deltaTime; // クールタイム中なら弾を打たない
         if (shotTimer > 0.0f) return;
-        if (!IsShootPressed()) return; // キーが押されてないなら弾を打たない
+        if (!shootHeld) return; // キーが押されてないなら弾を打たない
 
         Shoot();                  // 弾丸生成
         shotTimer = shotInterval; // 次のクールタイムを代入

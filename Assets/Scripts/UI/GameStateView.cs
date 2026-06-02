@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameStateView : MonoBehaviour
@@ -51,7 +52,7 @@ public class GameStateView : MonoBehaviour
 
         if (state == GameState.GameOver)
         {
-            sceneLoader.LoadGameOverScene();
+            StartCoroutine(LoadGameOverNextFrame());
             return;
         }
 
@@ -59,6 +60,12 @@ public class GameStateView : MonoBehaviour
         {
             sceneLoader.LoadGameClearScene();
         }
+    }
+
+    private IEnumerator LoadGameOverNextFrame()
+    {
+        yield return null;
+        sceneLoader.LoadGameOverScene();
     }
 
     private void HideAll()

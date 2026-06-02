@@ -55,7 +55,7 @@ public class SettingsManager : MonoBehaviour
     public void SetBrightness(float value)
     {
         Brightness = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat(BgmVolumeKey, BgmVolume);
+        PlayerPrefs.SetFloat(BrightnessKey, Brightness);
         PlayerPrefs.Save();
 
         ApplyBrightness();
