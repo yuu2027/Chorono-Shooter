@@ -32,12 +32,10 @@ public class GameStateView : MonoBehaviour
 
     public void ResumeGame()
     {
-        if (GameManager.Instance != null)
-        {
-            AudioManager.Instance.PlaySe(SeId.Button);
+        if (GameManager.Instance == null) return;
 
-            GameManager.Instance.ResumeGame();
-        }
+        AudioManager.Instance?.PlaySe(SeId.Button);
+        GameManager.Instance.ResumeGame();
     }
 
     private void OnStateChanged(GameState state)
@@ -49,6 +47,8 @@ public class GameStateView : MonoBehaviour
             pausePanel.SetActive(true);
             return;
         }
+
+        if (sceneLoader == null) return;
 
         if (state == GameState.GameOver)
         {
@@ -65,7 +65,11 @@ public class GameStateView : MonoBehaviour
     private IEnumerator LoadGameOverNextFrame()
     {
         yield return null;
-        sceneLoader.LoadGameOverScene();
+
+        if (sceneLoader != null)
+        {
+            sceneLoader.LoadGameOverScene();
+        }
     }
 
     private void HideAll()

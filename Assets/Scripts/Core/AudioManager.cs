@@ -122,12 +122,14 @@ public class AudioManager : MonoBehaviour
     {
         bgmUserVolume = Mathf.Clamp01(value);
         bgmSource.volume = currentBgmCueVolume * bgmUserVolume;
+        SetMixerVolume(bgmVolumeParameter, bgmUserVolume);
     }
 
     public void SetSeVolume(float value)
     {
         seUserVolume = Mathf.Clamp01(value);
         seSource.volume = 1f;
+        SetMixerVolume(seVolumeParameter, seUserVolume);
     }
 
     // âπåπÇÃèÄîı

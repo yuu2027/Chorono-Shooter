@@ -9,6 +9,9 @@ public class TimeGaugeView : MonoBehaviour
 
     private SpriteRenderer[] segments;
 
+    private TimeController subscribedController;
+
+
     private void Awake()
     {
         if (segmentRoot == null)
@@ -20,23 +23,23 @@ public class TimeGaugeView : MonoBehaviour
             .GetComponentsInChildren<SpriteRenderer>(true)
             .OrderBy(renderer => renderer.transform.GetSiblingIndex())
             .ToArray();
-
-        Debug.Log($"TimeGaugeView: segments={segments.Length}", this);
     }
 
     private void Start()
     {
-        if (TimeController.Instance == null) return;
+        subscribedController = TimeController.Instance;
+        if (subscribedController == null) return;
 
-        TimeController.Instance.GaugeChanged += OnGaugeChanged;
-        OnGaugeChanged(TimeController.Instance.Gauge, TimeController.Instance.MaxGauge);
+        subscribedController.GaugeChanged += OnGaugeChanged;
+        OnGaugeChanged(subscribedController.Gauge, subscribedController.MaxGauge);
     }
 
     private void OnDestroy()
     {
-        if (TimeController.Instance == null) return;
+        if (subscribedController == null) return;
 
-        TimeController.Instance.GaugeChanged -= OnGaugeChanged;
+        subscribedController.GaugeChanged -= OnGaugeChanged;
+        subscribedController = null;
     }
 
     private void OnGaugeChanged(float current, float max)
